@@ -37,8 +37,30 @@ function show()
 			msg = "<p>Found rows: " + len + "</p>";
 			document.querySelector('#status').innerHTML +=  msg;
 			for (i = 0; i < len; i++){
-				msg = "<p><b>" + results.rows.item(i).id + " " + results.rows.item(i).log + "</b></p>";
-				document.querySelector('#status').innerHTML +=  msg;
+//				msg = "<p><b>" + results.rows.item(i).id + " " + results.rows.item(i).log + "</b></p>";
+//				document.querySelector('#status').innerHTML +=  msg;
+				var newDiv = document.createElement("div")
+				
+				newDiv.setAttribute('id', i);
+				
+				var a = document.createElement("p");
+				var b = document.createElement("p");
+			
+				a.setAttribute('id', 'p1');
+				b.setAttribute('id', 'p2');
+			
+				var t=document.createTextNode(results.rows.item(i).id);
+				var q=document.createTextNode(results.rows.item(i).log);
+				
+				a.appendChild(t);
+				b.appendChild(q);
+			
+				newDiv.appendChild(a);
+				newDiv.appendChild(b);
+				
+				newDiv.style.backgroundColor = '#FB9B9B';
+				$content = document.getElementById("status");
+				$content.appendChild(newDiv);
 			}
 		}, null);
 	});
