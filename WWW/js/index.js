@@ -1,3 +1,7 @@
+document.addEventListener("deviceready", onDeviceReady, false);
+
+function onDeviceReady() 
+{
 var db = openDatabase('mytest', '1.0', 'Test DB', 2 * 1024 * 1024);
 var msg;
 
@@ -10,6 +14,7 @@ if (window.localStorage.getItem("new") === null)
 db.transaction(function (tx) {
   tx.executeSql('CREATE TABLE IF NOT EXISTS LOGS (id unique, log)');
 });
+}
 
 function add()
 {
