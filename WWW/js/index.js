@@ -37,12 +37,12 @@ function show()
 			msg = "<p>Found rows: " + len + "</p>";
 			document.querySelector('#status').innerHTML +=  msg;
 			for (i = 0; i < len; i++){
-//				msg = "<p><b>" + results.rows.item(i).id + " " + results.rows.item(i).log + "</b></p>";
-//				document.querySelector('#status').innerHTML +=  msg;
+
 				var newDiv = document.createElement("div")
 				
 				newDiv.setAttribute('id', i);
-				
+				newDiv.setAttribute('onClick', 'window.location = "index.html#details"');
+								
 				var a = document.createElement("p");
 				var b = document.createElement("p");
 			
