@@ -1,37 +1,43 @@
-// JavaScript Document
-document.addEventListener("deviceready", onDeviceReady, false);
+var db = openDatabase('mytest', '1.0', 'Test DB', 2 * 1024 * 1024);
+var msg;
 
-function SetData()
-{
-	var name = document.getElementById("name").value;	
-	var age = document.getElementById("age").value;	
-	var gender = document.getElementById("gender").value;
-	
-	window.localStorage.setItem("name", name);	
-	window.localStorage.setItem("age", age);
-	window.localStorage.setItem("gender", gender);
-}
-
-function onDeviceReady()
-{
-	var db = window.openDatabase("myTestDB", "1.0", "myDb", 1024 * 1024 * 500);	
-	
-	db.transaction(function(tx) 
+if (window.localStorage.getItem("new") === null)
 	{
-		tx.executeSql('CREATE TABLE ALARMS (name, age, gender)');
-	});
-}
+		window.localStorage.setItem("new", "notnow");
+		window.localStorage.setItem("i", 0);
+	}
 
-function AddAlarms()
+db.transaction(function (tx) {
+  tx.executeSql('CREATE TABLE IF NOT EXISTS LOGS (id unique, log)');
+});
+
+function add()
 {
-	var db = window.openDatabase("myTestDB", "1.0", "myDb", 1024 * 1024 * 500);
-	
-	var name = window.localStorage.getItem("name");	
-	var age = window.localStorage.getItem("age");
-	var gender = window.localStorage.getItem("gender");
+	var i = window.localStorage.getItem("i");
+	i++;
+	window.localStorage.setItem("i", i);
+	db.transaction(function (tx) {
+		tx.executeSql('INSERT INTO LOGS (id, log) VALUES (?, "foobar")', [i]);
 		
-	db.transaction(function(tx) 
-	{
-		tx.executeSql('INSERT INTO ALARMS (name, age, gender) VALUES (?, ?, ?)', [name, age, gender]);
 	});
+}
+
+function show()
+{
+	db.transaction(function (tx) {
+		tx.executeSql('SELECT * FROM LOGS', [], function (tx, results) {
+			var len = results.rows.length, i;
+			msg = "<p>Found rows: " + len + "</p>";
+			document.querySelector('#status').innerHTML +=  msg;
+			for (i = 0; i < len; i++){
+				msg = "<p><b>" + results.rows.item(i).id + " " + results.rows.item(i).log + "</b></p>";
+				document.querySelector('#status').innerHTML +=  msg;
+			}
+		}, null);
+	});
+}
+
+function cleardata()
+{
+	document.querySelector('#status').innerHTML = "";
 }
