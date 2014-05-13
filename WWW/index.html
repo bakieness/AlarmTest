@@ -10,10 +10,18 @@
 <body>
 <div data-role="page" id="main">
   <div data-role="content">
-  <input type="submit" onClick="add()" value="Add"/>
+  <a href="#add" class="ui-btn-right" data-icon="plus">Add</a>
   <input type="submit" onClick="show()" value="Get"/>
   <input type="submit" onClick="cleardata()" value="Clear"/>
   <div id="status" name="status"></div>
+  </div>
+</div>
+
+<div data-role="page2" id="add">
+  <div data-role="content">
+  <a href="#main" class="ui-btn-right" data-icon="plus">Done</a>
+  <input type="text" id="name" value="name" onChange="set()"/>
+  <input type="submit" onClick="add()" value="Add"/>
   </div>
 </div>
 </body>

@@ -11,13 +11,20 @@ db.transaction(function (tx) {
   tx.executeSql('CREATE TABLE IF NOT EXISTS LOGS (id unique, log)');
 });
 
+function set()
+{
+	var _name = document.getElementById("name").value;
+	window.localStorage.setItem("name", _name);
+}
+
 function add()
 {
+	var _name = window.localStorage.getItem("name");
 	var i = window.localStorage.getItem("i");
 	i++;
 	window.localStorage.setItem("i", i);
 	db.transaction(function (tx) {
-		tx.executeSql('INSERT INTO LOGS (id, log) VALUES (?, "foobar")', [i]);
+		tx.executeSql('INSERT INTO LOGS (id, log) VALUES (?, ?)', [i, _name]);
 		
 	});
 }
