@@ -1,12 +1,11 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<script src="js/index.js">
-</script>
+<link href="css/notification.css" rel="stylesheet" type="text/css"/>
+<script src="js/index.js"></script>
 <script src="jquery-mobile/jquery-1.6.4.min.js" type="text/javascript"></script>
 <script src="jquery-mobile/jquery.mobile-1.0.min.js" type="text/javascript"></script>
 <link href="jquery-mobile/jquery.mobile-1.0.min.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" type="text/css" href="css/notification.css" />
 </head>
 <body>
 <div data-role="page" id="main">
@@ -23,6 +22,16 @@
   <a href="#main" class="ui-btn-right" data-icon="plus">Done</a>
   <input type="text" id="name" value="name" onChange="set()"/>
   <input type="time" id="time" onChange="set()"/>
+      <select name="select-choice-min" id="repeat" data-mini="true" onchange="set();">
+    	<option value="Once">Once</option>
+		<option value="Monday">Monday</option>
+		<option value="Tuesday">Tuesday</option>
+  		<option value="Wednesday">Wednesday</option>
+  		<option value="Thursday">Thursday</option>
+    	<option value="Friday">Friday</option>
+    	<option value="Saturday">Saturday</option>
+   		<option value="Sunday">Sunday</option>
+	</select>
   <input type="submit" onClick="add()" value="Add"/>
   </div>
 </div>

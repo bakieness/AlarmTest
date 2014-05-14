@@ -6,12 +6,22 @@ if (window.localStorage.getItem("test") === null)
 		window.localStorage.setItem("new", "notnow");
 		window.localStorage.setItem("i", 0);
 	}
-	
+
+//creates database table if it does not already exist
+db.transaction(function (tx) {
+  tx.executeSql('CREATE TABLE IF NOT EXISTS TEST (id INTEGER PRIMARY KEY ASC, log, time, repeat)');
+});
+
+window.setInterval(function() 
+{	
+var time = currentTime();
+
+//creates notification for alarms
 db.transaction(function(tx) {
-	tx.executeSql('SELECT * FROM LOGS', [], function (tx, results) {
+	tx.executeSql('SELECT * FROM TEST', [], function (tx, results) {
 		var len = results.rows.length, i;
 		for (i = 0; i < len; i++){
-			if (results.rows.item(i).time === time())
+			if (results.rows.item(i).time === time)
 			{
 				navigator.notification.alert(
 					'Alarm Done!', 						// message
@@ -21,12 +31,8 @@ db.transaction(function(tx) {
 			)}}
 		});
 	});
-
-//creates database table if it does not already exist
-db.transaction(function (tx) {
-  tx.executeSql('CREATE TABLE IF NOT EXISTS LOGS (id INTEGER PRIMARY KEY ASC, log, time, repeat)');
-});
-
+}, 5000);
+	
 //sets localstrage to last user entered data
 function set()
 {
@@ -48,7 +54,7 @@ function add()
 	i++;
 	window.localStorage.setItem("i", i);
 	db.transaction(function (tx) {
-		tx.executeSql('INSERT INTO LOGS (id, log, time) VALUES (?, ?, ?, ?)', [i, _name, _time, _repeat]);
+		tx.executeSql('INSERT INTO TEST (id, log, time, repeat) VALUES (?, ?, ?, ?)', [i, _name, _time, _repeat]);
 		
 	});
 }
@@ -57,7 +63,7 @@ function add()
 function show()
 {
 	db.transaction(function (tx) {
-		tx.executeSql('SELECT * FROM LOGS', [], function (tx, results) {
+		tx.executeSql('SELECT * FROM TEST', [], function (tx, results) {
 			var len = results.rows.length, i;
 			msg = "<p>Found rows: " + len + "</p>";
 			document.querySelector('#status').innerHTML +=  msg;
@@ -79,7 +85,7 @@ function show()
 				var t=document.createTextNode(results.rows.item(i).id);
 				var q=document.createTextNode(" " + results.rows.item(i).log);
 				var u=document.createTextNode(results.rows.item(i).time);
-				var v=document.createTextNode(results.row.item(i).repeat);
+				var v=document.createTextNode(results.rows.item(i).repeat);
 				
 				a.appendChild(q);
 				b.appendChild(u);
@@ -112,7 +118,7 @@ function deletedata()
 	if (db) {
 	db.transaction(function (tx) {
 		//t.executeSql("DELETE FROM cars WHERE id=?", [id]
-		tx.executeSql("DELETE * FROM LOGS WHERE id = ?", [id]);
+		tx.executeSql("DELETE * FROM TEST WHERE id = ?", [id]);
 		});
 	}
 }
@@ -131,13 +137,14 @@ function setid(div)
 	
 }
 
+//function is called once the notification has been dismissed by the user
 function alertDismiss()
 {
 	alert('Alarm Stopped');
 	var currentDate = date();
 	alert(currentDate);
 	db.transaction(function(tx) {
-		tx.executeSql('SELECT * FROM LOGS', [], function (tx, results) {
+		tx.executeSql('SELECT * FROM TEST', [], function (tx, results) {
 			var len = results.rows.length, i;
 			for (i = 0; i < len; i++){
 				dbid = row(i).id;
@@ -151,6 +158,7 @@ function alertDismiss()
 	});
 }
 
+//gets the current date
 function date()
 {
 	var today = new Date();
@@ -170,10 +178,11 @@ function date()
 	return today;
 }
 
-function time() {
+//gets the current time of day
+function currentTime() {
     var date = new Date();
-    var mins = d.getMinutes();
-    var hours = d.getHours();
-	var currentTime = n + ":" + f;
+    var mins = date.getMinutes();
+    var hours = date.getHours();
+	var currentTime = hours + ":" + mins;
 	return currentTime;
 }
