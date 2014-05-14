@@ -1,4 +1,4 @@
-var db = openDatabase('newtestdb', '2.0', 'Test DB', 2 * 1024 * 1024);
+var db = openDatabase('newdbtest', '1.0', 'Test DB', 2 * 1024 * 1024);
 var msg;
 
 if (window.localStorage.getItem("test") === null)
