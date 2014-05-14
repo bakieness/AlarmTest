@@ -11,7 +11,7 @@ db.transaction(function(tx) {
 	tx.executeSql('SELECT * FROM LOGS', [], function (tx, results) {
 		var len = results.rows.length, i;
 		for (i = 0; i < len; i++){
-			if (results.rows.item(i).time = time.now)
+			if (results.rows.item(i).time = time())
 			{
 				navigator.notification.alert(
 					'Alarm Done!', 						// message
@@ -160,4 +160,12 @@ function date()
 	} 
 	today = dd+'/'+mm+'/'+yyyy;
 	return today;
+}
+
+function time() {
+    var date = new Date();
+    var mins = d.getMinutes();
+    var hours = d.getHours();
+	var currentTime = n + ":" + f;
+	return currentTime;
 }
