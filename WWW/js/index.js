@@ -6,6 +6,21 @@ if (window.localStorage.getItem("test") === null)
 		window.localStorage.setItem("new", "notnow");
 		window.localStorage.setItem("i", 0);
 	}
+	
+db.transaction(function(tx) {
+	tx.executeSql('SELECT * FROM LOGS', [], function (tx, results) {
+		var len = results.rows.length, i;
+		for (i = 0; i < len; i++){
+			if (results.rows.item(i).time = time.now)
+			{
+				navigator.notification.alert(
+					'Alarm Done!', 						// message
+					alertDismiss,         				// callback
+					results.rows.item(i).name,          // title
+					'Done'								// buttonName
+			)}}
+		});
+	});
 
 //creates database table if it does not already exist
 db.transaction(function (tx) {
@@ -55,7 +70,7 @@ function show()
 				
 				a.setAttribute('id', 'p1');
 				b.setAttribute('id', 'p2');
-			
+				
 				var t=document.createTextNode(results.rows.item(i).id);
 				var q=document.createTextNode(" " + results.rows.item(i).log);
 				var u=document.createTextNode(results.rows.item(i).time);
@@ -106,4 +121,43 @@ function setid(div)
 		window.localStorage.setItem("dataid", dataid);
 		})
 	
+}
+
+function alertDismiss()
+{
+	alert('Alarm Stopped');
+	var currentDate = date();
+	alert(currentDate);
+	db.transaction(function(tx) {
+		tx.executeSql('SELECT * FROM LOGS', [], function (tx, results) {
+			var len = results.rows.length, i;
+			for (i = 0; i < len; i++){
+				dbid = row(i).id;
+				if (results.rows.item(i).repeat = 'once')
+				{
+					window.localstorage.setItem("dataid", dbid);
+					deletedata();
+				}
+			}
+		});
+	});
+}
+
+function date()
+{
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1; //January is 0
+	var yyyy = today.getFullYear();
+	
+	if(dd<10)
+	{
+		dd='0'+dd
+	} 
+	if(mm<10) 
+	{
+		mm='0'+mm
+	} 
+	today = dd+'/'+mm+'/'+yyyy;
+	return today;
 }
