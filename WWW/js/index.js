@@ -1,4 +1,4 @@
-var db = openDatabase('newdbtest', '1.0', 'Test DB', 2 * 1024 * 1024);
+var db = openDatabase('newdbtest', '1.0', 'Test DB', 1024 * 1024);
 var msg;
 
 if (window.localStorage.getItem("test") === null)
@@ -81,8 +81,7 @@ function show()
 				a.setAttribute('id', 'p1');
 				b.setAttribute('id', 'p2');
 				c.setAttribute('id', 'p1');
-				
-				var t=document.createTextNode(results.rows.item(i).id);
+
 				var q=document.createTextNode(" " + results.rows.item(i).log);
 				var u=document.createTextNode(results.rows.item(i).time);
 				var v=document.createTextNode(results.rows.item(i).repeat);
@@ -91,7 +90,6 @@ function show()
 				b.appendChild(u);
 				c.appendChild(v);
 			
-				newDiv.appendChild(t);
 				newDiv.appendChild(a);
 				newDiv.appendChild(b);
 				newDiv.appendChild(c);
@@ -114,11 +112,12 @@ function cleardata()
 function deletedata()
 {
 	var id = window.localStorage.getItem("dataid");
-	alert(id);
+	var n = Number(id)
+	alert(n);
 	if (db) {
 	db.transaction(function (tx) {
 		//t.executeSql("DELETE FROM cars WHERE id=?", [id]
-		tx.executeSql("DELETE * FROM TEST WHERE id = ?", [id]);
+		tx.executeSql("DELETE FROM TEST WHERE id=?", [n]);
 		});
 	}
 }
@@ -131,10 +130,13 @@ function setid(div)
 		var currentID = clicked.id;
 		var text = $.trim($('#' + currentID).text()),
     	word = text.split(' ');
-    	dataid = word[0]
+    	dataid = word[0];
+		dataid = parseInt(dataid);
+		if (typeof dataid === 'number')
+		{
 		window.localStorage.setItem("dataid", dataid);
-		})
-	
+		}
+		})	
 }
 
 //function is called once the notification has been dismissed by the user
